@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>네이버 홈 클론</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background-color: #f5f6f7;
+    }
+    .header {
+      background-color: #03c75a;
+      padding: 10px 20px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .header img {
+      height: 30px;
+    }
+    .login-btn {
+      background-color: white;
+      color: #03c75a;
+      border: none;
+      padding: 5px 10px;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+    .search-section {
+      display: flex;
+      justify-content: center;
+      margin: 20px 0;
+    }
+    .search-box {
+      width: 60%;
+      display: flex;
+    }
+    .search-box input {
+      flex: 1;
+      padding: 10px;
+      border: 1px solid #ccc;
+      border-right: none;
+      border-radius: 4px 0 0 4px;
+      outline: none;
+    }
+    .search-box button {
+      padding: 10px 20px;
+      background-color: #03c75a;
+      color: white;
+      border: none;
+      border-radius: 0 4px 4px 0;
+      cursor: pointer;
+    }
+    .menu {
+      display: flex;
+      justify-content: center;
+      gap: 30px;
+      margin: 20px 0;
+    }
+    .menu-item {
+      text-align: center;
+      font-size: 14px;
+      color: #333;
+    }
+    .menu-item img {
+      width: 40px;
+      height: 40px;
+      margin-bottom: 5px;
+    }
+    .section {
+      background-color: white;
+      margin: 10px auto;
+      padding: 15px;
+      max-width: 800px;
+      border-radius: 10px;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    }
+    .section h3 {
+      margin-top: 0;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="header">
+    <img src="https://www.naver.com/favicon.ico" alt="Naver Logo" />
+    <button class="login-btn">로그인</button>
+  </div>
+
+  <div class="search-section">
+    <div class="search-box">
+      <input type="text" placeholder="검색어를 입력하세요" id="search-input" />
+      <button onclick="search()">검색</button>
+    </div>
+  </div>
+
+  <div class="menu">
+    <div class="menu-item">
+      <img src="https://ssl.pstatic.net/static/m/mail/icon_mail.png" alt="메일" />
+      <div>메일</div>
+    </div>
+    <div class="menu-item">
+      <img src="https://ssl.pstatic.net/static/m/cafe/icon_cafe.png" alt="카페" />
+      <div>카페</div>
+    </div>
+    <div class="menu-item">
+      <img src="https://ssl.pstatic.net/static/m/blog/icon_blog.png" alt="블로그" />
+      <div>블로그</div>
+    </div>
+    <div class="menu-item">
+      <img src="https://ssl.pstatic.net/static/m/newsstand/icon_news.png" alt="뉴스" />
+      <div>뉴스</div>
+    </div>
+  </div>
+
+  <div class="section">
+    <h3>오늘의 뉴스</h3>
+    <ul>
+      <li>네이버, 새로운 AI 서비스 출시</li>
+      <li>주말 날씨 맑고 덥다</li>
+      <li>국내 증시 상승 마감</li>
+    </ul>
+  </div>
+
+  <div class="section">
+    <h3>날씨 정보</h3>
+    <p>서울 24℃ / 맑음</p>
+  </div>
+
+  <script>
+    function search() {
+      const keyword = document.getElementById("search-input").value;
+      if (keyword) {
+        window.open(`https://search.naver.com/search.naver?query=${encodeURIComponent(keyword)}`, "_blank");
+      } else {
+        alert("검색어를 입력하세요.");
+      }
+    }
+  </script>
+
+</body>
+</html>
