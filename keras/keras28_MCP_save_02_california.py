@@ -1,0 +1,76 @@
+import sklearn as sk
+import tensorflow as tf
+import numpy as np
+
+# import ssl
+# ssl._create_default_https_context = ssl._create_unverified_context
+# 인증서 오류 처리
+
+from tensorflow.python.keras.models import Sequential
+from tensorflow.python.keras.layers import Dense
+from tensorflow.python.keras.callbacks import EarlyStopping, ModelCheckpoint
+from sklearn.model_selection import train_test_split
+from sklearn.datasets import fetch_california_housing
+from sklearn.metrics import r2_score, mean_squared_error
+
+#1. 데이터
+datasets = fetch_california_housing()
+x = datasets.data
+y = datasets.target
+
+x_train, x_test, y_train, y_test = train_test_split(
+    x, y,               # 각각 train과 test에 들어갈 값
+    test_size=0.1,      # 전체 데이터 중 테스트데이터에 쓸 비율, 학습데이터는 자동으로 나머지로 정해짐
+    random_state=748    # 랜덤시드값
+)
+
+#2. 모델구성
+model = Sequential()
+model.add(Dense(16, input_dim = 8, activation='relu'))
+model.add(Dense(32, activation='relu'))
+model.add(Dense(32, activation='relu'))
+model.add(Dense(32, activation='relu'))
+model.add(Dense(32, activation='relu'))
+model.add(Dense(16, activation='relu'))
+model.add(Dense(1))
+
+#3. 컴파일, 훈련
+model.compile(loss = 'mse', optimizer = 'adam')
+es = EarlyStopping(
+    monitor='val_loss',
+    mode='min',
+    patience=10,
+    restore_best_weights=True
+)
+
+################## mcp 세이프 파일명 만들기 ##################
+import datetime
+date = datetime.datetime.now()
+print(date)         # 2025-06-02 13:00:32.447711
+print(type(date))   # <class 'datetime.datetime'>
+date = date.strftime("%y%m%d_%H%M")
+print(date)         # 250602_1305
+print(type(date))   # <class 'str'>
+
+
+path = './_save/keras28_mcp/02_california/'
+filename = '{epoch:04d}-{val_loss:.4f}.hdf5'
+filepath = ''.join([path, 'k28_', date, '_', filename])
+
+mcp = ModelCheckpoint(
+    monitor='val_loss',
+    mode='auto',
+    save_best_only=True,
+    filepath=filepath
+)
+
+model.fit(x_train, y_train, epochs = 600, batch_size = 64,
+          validation_split=0.2, callbacks=[es, mcp])
+
+#4. 평가, 예측
+loss = model.evaluate(x_test, y_test)
+results = model.predict(x_test)
+r2 = r2_score(y_test, results)
+print(r2)
+
+# 0.6561379082601324
