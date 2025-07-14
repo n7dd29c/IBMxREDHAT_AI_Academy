@@ -1,0 +1,65 @@
+#47_0 카피
+import random
+import pandas as pd
+import numpy as np
+import matplotlib.pyplot as plt
+import xgboost as xgb
+
+from sklearn.datasets import load_digits
+from sklearn.model_selection import train_test_split
+from sklearn.preprocessing import StandardScaler
+from sklearn.neighbors import KNeighborsClassifier, KNeighborsRegressor
+from sklearn.metrics import accuracy_score, f1_score, r2_score
+
+from xgboost import XGBClassifier
+
+seed = 123
+random.seed(seed)
+np.random.seed(seed)
+
+#1. 데이터 
+#target이 두 번째 컬럼에 있음
+path = './_data/kaggle/santander/'
+train_csv = pd.read_csv(path + 'train.csv', index_col=0)
+test_csv = pd.read_csv(path + 'test.csv', index_col=0)
+submission_csv = pd.read_csv(path + 'sample_submission.csv', index_col=0)
+
+x = train_csv.drop(['target'], axis=1)
+y = train_csv['target']
+
+x_train, x_test, y_train, y_test = train_test_split(
+    x, y, shuffle=True, random_state=123, test_size=0.2,
+    stratify=y
+)
+
+scaler = StandardScaler()
+x_train = scaler.fit_transform(x_train)
+x_test = scaler.transform(x_test)
+
+#2. 모델
+# model = KNeighborsRegressor(n_neighbors=5)
+model = KNeighborsClassifier(n_neighbors=5)
+
+model.fit(x_train, y_train)
+
+print("=================", model.__class__.__name__, "=================" )
+print('acc :', model.score(x_test, y_test))
+# print('r2 :', model.score(x_test, y_test))
+
+# y_pred = model.predict(x_test)
+# r2 = r2_score(y_test, y_pred)
+# print('r2 score: ', r2)
+
+
+y_pred = model.predict(x_test)
+acc = accuracy_score(y_test, y_pred)
+f1 = f1_score(y_test, y_pred, average='macro')
+print('accuracy score: ', acc)
+print('f1 score: ', f1)
+
+'''
+================= KNeighborsClassifier =================
+acc : 0.899375
+accuracy score:  0.899375
+f1 score:  0.4740060297661817
+'''
